@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  server:
+    container_name: server
+    build: ./server/.
+    ports:
+      - "8090:8090"
+    networks:
+      - books-net
+
+  client:
+    container_name: client
+    environment:
+      SPRING_CONFIG_URI: server
+      SPRING_CONFIG_PORT: 8090
+      POSTGRES_URL: postgres
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_PORT: 5432
+
+    build: ./client/.
+    ports:
+      - "8080:8080"
+    depends_on:
+      - server
+      - postgres
+    networks:
+      - books-net
+
+  postgres:
+    image: postgres:15.3-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      - books-net
+    restart:
+      unless-stopped
+
+networks:
+  books-net:
