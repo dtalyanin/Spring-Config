@@ -1,0 +1,2 @@
+logging:
+  config: http://${SPRING_CONFIG_URI:localhost}:${SPRING_CONFIG_PORT:8090}/SPRING_APPLICATION_NAME/default/master/logback-spring.xml

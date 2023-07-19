@@ -1,12 +1,13 @@
-app:
-  info: ' '
-
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     username: ${POSTGRES_USERNAME:postgres}
     password: ${POSTGRES_PASSWORD:postgres}
     url: jdbc:postgresql://${POSTGRES_URL:localhost}:${POSTGRES_PORT:5432}/books
+
+  cloud:
+    config:
+      override-none: true
 
   liquibase:
     enabled: true
