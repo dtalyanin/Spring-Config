@@ -18,10 +18,59 @@ services:
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_PORT: 5432
-
+      JAVA_OPTS: -XX:+PrintFlagsFinal
     build: ./client/.
+    deploy:
+      resources:
+        limits:
+          memory: 800M #MaxHeapSize = 200MB
     ports:
       - "8080:8080"
+    depends_on:
+      - server
+      - postgres
+    networks:
+      - books-net
+
+  client-no-support:
+    container_name: client-no-support
+    environment:
+      SPRING_CONFIG_URI: server
+      SPRING_CONFIG_PORT: 8090
+      POSTGRES_URL: postgres
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_PORT: 5432
+      JAVA_OPTS: -XX:+PrintFlagsFinal -XX:-UseContainerSupport
+    build: ./client/.
+    deploy:
+      resources:
+        limits:
+          memory: 800M #MaxHeapSize = 3174MB
+    ports:
+      - "8085:8085"
+    depends_on:
+      - server
+      - postgres
+    networks:
+      - books-net
+
+  client-8:
+    container_name: client-8
+    environment:
+      SPRING_CONFIG_URI: server
+      SPRING_CONFIG_PORT: 8090
+      POSTGRES_URL: postgres
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_PORT: 5432
+    build: .
+    deploy:
+      resources:
+        limits:
+          memory: 800M #MaxHeapSize = 3174MB
+    ports:
+      - "8086:8086"
     depends_on:
       - server
       - postgres
